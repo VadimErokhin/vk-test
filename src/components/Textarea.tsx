@@ -1,10 +1,19 @@
+import { memo } from "react";
 
-
-export function Textarea(props) {
-
-  return (
-    <textarea onChange={(e) => props.updateValue(e.target.value)}>
-      {props.value}
-    </textarea>
-  )
+interface TextareaProps {
+  updateValue: (value: string) => void;
+  value: string;
 }
+
+const Textarea = memo((props: TextareaProps) => {
+  return (
+    <textarea
+      value={props.value}
+      onChange={(e) => props.updateValue(e.target.value)}
+      className="textarea"
+      placeholder="Ваш комментарий:"
+    />
+  );
+});
+
+export default Textarea;

@@ -3,6 +3,6 @@ export interface SelectOption<T> {
   label: string;
 }
 
-export type Tower = 'A' | 'B'
+export type Tower = "A" | "B";
 
 export type DropdownValue = string | number | Tower;

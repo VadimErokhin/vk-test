@@ -9,31 +9,54 @@ interface DatePickerProps {
   toValue: string;
 }
 
-
-
-const Datepicker = memo((props: DatePickerProps) => {
-  console.log('fjfj')
+const Datepicker = (props: DatePickerProps) => {
   return (
-    <>
-      <input
-        onChange={(e) => props.updateDateValue(e.target.value)}
-        type="date"
-        value={props.dateValue}
-      />
-      <input
-        onChange={(e) => props.updateTimeFromValue(e.target.value)}
-        type="time"
-        value={props.fromValue}
-        max={props.toValue || "24:00"}
-      />
-      <input
-        onChange={(e) => props.updateTimeToValue(e.target.value)}
-        type="time"
-        value={props.toValue}
-        min={props.fromValue}
-      />
-    </>
-  );
-})
+    <div className="datepicker datepicker-wrapper">
+      <div className="datepicker__input-box">
+        <label className="datepicker__label" htmlFor="data">
+          Дата:
+        </label>
+        <input
+          id="data"
+          className="datepicker__input"
+          required
+          onChange={(e) => props.updateDateValue(e.target.value)}
+          type="date"
+          value={props.dateValue}
+        />
+      </div>
 
-export default Datepicker
+      <div className="datepicker__input-box">
+        <label className="datepicker__label" htmlFor="from">
+          C:
+        </label>
+        <input
+          id="from"
+          className="datepicker__input"
+          required
+          onChange={(e) => props.updateTimeFromValue(e.target.value)}
+          type="time"
+          value={props.fromValue}
+          max={props.toValue || "24:00"}
+        />
+      </div>
+
+      <div className="datepicker__input-box">
+        <label className="datepicker__label" htmlFor="to">
+          До:
+        </label>
+        <input
+          id="to"
+          className="datepicker__input"
+          required
+          onChange={(e) => props.updateTimeToValue(e.target.value)}
+          type="time"
+          value={props.toValue}
+          min={props.fromValue}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default memo(Datepicker);

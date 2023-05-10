@@ -1,4 +1,9 @@
-import { useCallback, useMemo, useReducer, useState } from "react";
+import {
+  SyntheticEvent,
+  useCallback,
+  useMemo,
+  useState,
+} from "react";
 import "./App.css";
 import { DropdownValue, Tower } from "./types";
 import Dropdown from "./components/Dropdown";
@@ -8,9 +13,8 @@ import {
   roomOptions,
 } from "./components/optionsConfig";
 import Datepicker from "./components/Datepicker";
-import { Textarea } from "./components/Textarea";
+import Textarea from "./components/Textarea";
 import { Btn } from "./components/Btn";
-
 
 interface BookingForm {
   tower: Tower | "";
@@ -22,188 +26,105 @@ interface BookingForm {
   to: string;
 }
 
-const UPDATE_DATE = 'UPDATE_DATE'
-const UPDATE_FROM = 'UPDATE_FROM'
-const UPDATE_TO = 'UPDATE_TO'
-const UPDATE_COMMENT = 'UPDATE_COMMENT'
-
-function reducer(state: any, action: any) {
-  switch(action.type){
-    case UPDATE_DATE :
-      return {
-        ...state, date: action.value
-      }
-    case UPDATE_FROM :
-      return {
-        ...state, from: action.value
-      }
-    case UPDATE_TO :
-      return {
-        ...state, to: action.value
-      }
-    case UPDATE_COMMENT :
-      return {
-        ...state, comment: action.value
-      }
-  }
-
-}
-
-
 function App() {
-  const[state, dispatch] = useReducer(reducer, {
-    // tower: "A",
-    // floor: 0,
-    // room: 0,
-    date: "",
-    comment: "",
-    from: "",
-    to: "",
-  })
+  const [tower, setTower] = useState<Tower | "">("");
+  const [floor, setFloor] = useState<number>(0);
+  const [room, setRoom] = useState<number>(0);
+  const [date, setDate] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
+  const [from, setFrom] = useState<string>("");
+  const [to, setTo] = useState<string>("");
 
-  const [form, setForm] = useState<BookingForm>({
-    tower: "A",
-    floor: 0,
-    room: 0,
-    date: "",
-    comment: "",
-    from: "",
-    to: "",
-  });
-
-  // const [date, setDate] = useState('')
-  // const [from, setFrom] = useState('')
-  // const [to, setTo] = useState('')
-
-  function setDate(value: string ) {
-    dispatch({
-      type: UPDATE_DATE,
-      value
-    })
-  }
-
-  function setFrom(value: string ) {
-    dispatch({
-      type: UPDATE_FROM,
-      value
-    })
-  }
-
-  function setTo(value: string ) {
-    dispatch({
-      type: UPDATE_TO,
-      value
-    })
-  }
-
-  function setComment(value: string ) {
-    dispatch({
-      type: UPDATE_COMMENT,
-      value
-    })
-  }
-
-  function updateTower(value: DropdownValue) {
-    console.log(value);
-    setForm((state) => {
-      return {
-        ...state,
-        tower: value as Tower,
-      };
-    });
-  }
-
-  function updateFloor(value: DropdownValue) {
-    console.log(value);
-    setForm((state) => {
-      return {
-        ...state,
-        floor: value as number,
-      };
-    });
-  }
-
-  function updateRoom(value: DropdownValue) {
-    console.log(value);
-    setForm((state) => {
-      return {
-        ...state,
-        room: value as number,
-      };
-    });
-  }
-
-  function updateDate(value: string) {
-    console.log(value);
-    setForm((state) => {
-      return {
-        ...state,
-        date: value,
-      };
-    });
-  }
-
-
-  const updateStringValue = useCallback((key: keyof BookingForm) => {
-    console.log("setUpUpdateStringValue", key);
-    return (value: string) => {
-      setForm((state) => {
-        console.log("updateStringValue", key, value);
-        return {
-          ...state,
-          [key]: value,
-        };
-      });
-    };
-  }, [setForm])
-
-  function submitForm(event) {
-    event.preventDefault();
-    console.log(event);
-  }
-
-  const memoDatepickeValue = useMemo(() => {
+  const memoFormValue = useMemo<BookingForm>(() => {
     return {
-      date: form.date,
-      from: form.from,
-      to: form.to
-    }
-  },[form])
+      date,
+      from,
+      to,
+      tower,
+      floor,
+      room,
+      comment,
+    };
+  }, [date, from, to, tower, floor, room, comment]);
 
+  function submitForm(event: SyntheticEvent) {
+    event.preventDefault();
+    console.log(
+      "Submited Form Value:",
+      JSON.stringify(memoFormValue),
+      memoFormValue
+    );
+  }
+
+  function resetForm() {
+    setTower("");
+    setFloor(0);
+    setRoom(0);
+    setDate("");
+    setComment("");
+    setFrom("");
+    setTo("");
+  }
+
+  const updateTower = useCallback(
+    (value: DropdownValue) => {
+      setTower(value as Tower);
+    },
+    [setTower]
+  );
+
+  const updateFloor = useCallback(
+    (value: DropdownValue) => {
+      setFloor(Number(value));
+    },
+    [setFloor]
+  );
+
+  const updateRoom = useCallback(
+    (value: DropdownValue) => {
+      setRoom(Number(value));
+    },
+    [setRoom]
+  );
 
   return (
-    <form onSubmit={submitForm}>
-      <Dropdown
-        updateValue={updateTower}
-        value={form.tower}
-        options={towerOptions}
-      />
-      <Dropdown
-        updateValue={updateFloor}
-        value={form.floor}
-        options={floorOptions}
-      />
-      <Dropdown
-        updateValue={updateRoom}
-        value={form.room}
-        options={roomOptions}
-      />
-      <Datepicker
-        updateDateValue={setDate}
-        updateTimeFromValue={setFrom}
-        updateTimeToValue={setTo}
-        dateValue={state.date}
-        fromValue={state.from}
-        toValue={state.to}
-      />
-      <Textarea value={form.comment} updateValue={setComment} />
-      <Btn>
-        Отправить
-      </Btn>
-       <Btn>
-        Очистить
-      </Btn>
-    </form>
+    <div className="wrapper">
+      <form className="form" onReset={resetForm} onSubmit={submitForm}>
+        <div className="dropdowns-wrapper">
+          <Dropdown
+            label='Выберете башню'
+            updateValue={updateTower}
+            value={tower}
+            options={towerOptions}
+          />
+          <Dropdown
+            label='Выберете этаж'
+            updateValue={updateFloor}
+            value={floor}
+            options={floorOptions}
+          />
+          <Dropdown
+          label='Выберете комнату'
+          updateValue={updateRoom}
+          value={room}
+          options={roomOptions} />
+        </div>
+
+        <Datepicker
+          updateDateValue={setDate}
+          updateTimeFromValue={setFrom}
+          updateTimeToValue={setTo}
+          dateValue={date}
+          fromValue={from}
+          toValue={to}
+        />
+        <Textarea value={comment} updateValue={setComment} />
+        <div className="buttons-wrapper">
+          <Btn type="submit">Отправить</Btn>
+          <Btn type="reset">Очистить</Btn>
+        </div>
+      </form>
+    </div>
   );
 }
 
