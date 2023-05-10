@@ -23,7 +23,7 @@ export const floorOptions: Array<SelectOption<number>> = Array.from(
 export const roomOptions: Array<SelectOption<number>> = Array.from(
   Array(10),
   (_x, index) => ({
-    label: `Переговорная комната № ${index + 1}`,
+    label: `Переговорная № ${index + 1}`,
     value: index + 1,
   })
 );
