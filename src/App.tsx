@@ -92,19 +92,19 @@ function App() {
       <form className="form" onReset={resetForm} onSubmit={submitForm}>
         <div className="dropdowns-wrapper">
           <Dropdown
-            label='Выберете башню'
+            label='Выберите башню'
             updateValue={updateTower}
             value={tower}
             options={towerOptions}
           />
           <Dropdown
-            label='Выберете этаж'
+            label='Выберите этаж'
             updateValue={updateFloor}
             value={floor}
             options={floorOptions}
           />
           <Dropdown
-          label='Выберете комнату'
+          label='Выберите комнату'
           updateValue={updateRoom}
           value={room}
           options={roomOptions} />
